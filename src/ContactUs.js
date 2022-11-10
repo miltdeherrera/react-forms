@@ -7,6 +7,7 @@ const ContactUs = () => {
     const [phone, setPhone] = useState('');
     const [phoneType, setPhoneType] = useState('');
     const [comments, setComments] = useState('');
+    const [hasSubmitted, setHasSubmitted] = useState(false);
 
     const [validationErrors, setValidationErrors] = useState([]);
 
@@ -26,6 +27,7 @@ const ContactUs = () => {
 
     const onSubmit = (e) => {
         e.preventDefault();
+        setHasSubmitted(true);
 
         const contactUsInformation = {
             name,
@@ -36,13 +38,19 @@ const ContactUs = () => {
             submittedOn: new Date()
         };
 
-        console.log(contactUsInformation);
+        if (validationErrors.length > 0) {
+            return (alert('Cannot submit'));
+        } else {
+            setHasSubmitted(false);
+            console.log(contactUsInformation);
 
-        setName('');
-        setEmail('');
-        setPhone('');
-        setPhoneType('');
-        setComments('');
+            setName('');
+            setEmail('');
+            setPhone('');
+            setPhoneType('');
+            setComments('');
+        }
+
     }
 
     return (
@@ -50,6 +58,18 @@ const ContactUs = () => {
             <h2>Contact Us</h2>
             <form onSubmit={onSubmit}>
                 <div>
+                    {validationErrors.length > 0
+                        && hasSubmitted
+                        && (
+                            <div>
+                                The following errors were found:
+                                <ul>
+                                    {validationErrors.map(error => (
+                                        <li key={error}>{error}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
                     <label htmlFor='name'>Name:</label>
                     <input
                         id='name'
