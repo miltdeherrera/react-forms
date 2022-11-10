@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 
 const ContactUs = () => {
@@ -7,6 +7,22 @@ const ContactUs = () => {
     const [phone, setPhone] = useState('');
     const [phoneType, setPhoneType] = useState('');
     const [comments, setComments] = useState('');
+
+    const [validationErrors, setValidationErrors] = useState([]);
+
+    useEffect(() => {
+        const errors = [];
+
+        if (name <= 0) {
+            errors.push('Please enter your name');
+        }
+
+        if (!email.includes('@')) {
+            errors.push('Please provide a valid email address');
+        }
+
+        setValidationErrors(errors);
+    }, [name, email]);
 
     const onSubmit = (e) => {
         e.preventDefault();
